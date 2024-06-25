@@ -3,9 +3,38 @@ const apikey =
 
 const blogContainer = document.getElementById("blog-container");
 
+const searchField = document.getElementById('search-input')
+const searchButton = document.getElementById("search-button")
+
 async function fetchRandomNews(){
     try{
         const apiURL = `https://newsapi.org/v2/top-headlines?country=us&pageSize=15&apikey=${apikey}`
+        const response = await fetch(apiURL)
+        const data = await response.json()
+        return data.articles;
+
+    } catch(error){
+        console.error("Error fetching random news", error)
+        return []
+    }
+}
+
+searchButton.addEventListener("click", async ()=>{
+    const query = searchField.ariaValueMax.trim()
+    if(query!= ""){
+        try{
+            const articles = await fetchNewsQuery(query)
+            displayBlogs(articles);
+
+        }catch(error){
+            console.error("Error fetching news by query", error)
+        }
+    }
+})
+
+async function fetchNewsQuery(query){
+    try{
+        const apiURL = `https://newsapi.org/v2/everything?q=${query}&pageSize=15&apikey=${apikey}`
         const response = await fetch(apiURL)
         const data = await response.json()
         return data.articles;
@@ -34,6 +63,9 @@ function displayBlogs(articles){
         blogCard.appendChild(img);
         blogCard.appendChild(title);
         blogCard.appendChild(description);
+        blogCard.addEventListener('click', ()=>{
+            window.open(article.url, "_blank")
+        })
         blogContainer.appendChild(blogCard);
     })
 
