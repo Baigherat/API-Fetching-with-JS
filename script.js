@@ -25,9 +25,11 @@ function displayBlogs(articles){
         img.src = article.urlToImage;
         img.alt = article.title;
         const title = document.createElement("h2");
-        title.textContent = article.title;
+        const truncatedTitle = article.title.length > 30 ? article.title.slice(0,30) + "..." : article.title;
+        title.textContent = truncatedTitle;
         const description = document.createElement("p");
-        description.textContent = article.description;
+        const truncatedDescription = article.description.length > 120 ? article.description.slice(0,120) + "..." : article.description
+        description.textContent = truncatedDescription;
 
         blogCard.appendChild(img);
         blogCard.appendChild(title);
